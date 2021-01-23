@@ -1,0 +1,4 @@
+apply plugin : 'java'
+
+description = "QA client and server program"
+
