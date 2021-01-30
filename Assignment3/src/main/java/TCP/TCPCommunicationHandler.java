@@ -6,6 +6,7 @@ import TCP.EncoderDecoder;
 
 public class TCPCommunicationHandler {
 
+	private String clientName;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 
@@ -21,6 +22,14 @@ public class TCPCommunicationHandler {
 
 	public void setInputStream (InputStream initIn) throws Exception {
 		in = new ObjectInputStream(initIn);
+	}
+
+	public void setClientName (String initClientName) {
+		clientName = initClientName;
+	}
+
+	public String getClientNme () {
+		return clientNme;
 	}
 
 	public void sendMessage (String source) throws Exception {
