@@ -69,6 +69,7 @@ public class TCPServer {
 			boolean complete = false;
 			while (!complete) {
 
+			}
 
 			/*
 			recv = handler.recvMessage();
