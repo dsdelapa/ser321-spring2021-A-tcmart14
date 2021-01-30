@@ -64,6 +64,7 @@ public class TCPServer {
 			JSONObject obj = JSONMessageParser.getJSONObject(recv);
 			if (obj.getString("type").equals("name")) {
 				System.out.println("Received: " + obj.getString("name"));	
+				handler.setClientName(obj.getString("name"));	
 			}
 
 			/*
