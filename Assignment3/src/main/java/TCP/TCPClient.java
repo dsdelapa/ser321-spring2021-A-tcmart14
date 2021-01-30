@@ -7,6 +7,7 @@ import org.json.*;
 import TCP.JSONMsgBuilder;
 import java.util.Scanner;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class TCPClient {
 
@@ -45,36 +46,17 @@ public class TCPClient {
 			recv = handler.recvMessage();
 			System.out.print("Respond: ");
 			String response = scanner.nextLine();
+			System.out.println(response);
 			String jsonResponse = JSONMsgBuilder.getResponse("name", response);
+			System.out.println(jsonResponse);
+			TimeUnit.SECONDS.sleep(3);
 			handler.sendMessage(jsonResponse);
+
+			System.out.println("Transaction completed on thius end. no error");
 		} catch (Exception e) {
 			System.out.println("Could not connect to server and establish communications");
 			System.exit(1);
 		}
-		System.out.println("Game resources initialized");
-		/*try{
-			//String recv = handler.recvMessage();
-			//System.out.println("Received message!");
-			System.out.println("Waiting for message");
-			if (s == null || handler == null) {
-				System.out.println("something failed");
-				throw new Exception();
-			}
-			String recv;
-			recv = handler.recvMessage();
-			System.out.print("Respond: ");
-			String response = scanner.nextLine();
-			String jsonResponse = JSONMsgBuilder.getResponse("name", response);
-			handler.sendMessage(jsonResponse);
-		} catch (IOException e) {
-			System.out.println("Problem with input/output. Closing sockets and exiting...");
-			//s.close();
-			System.exit(1);
-		} catch (Exception e) {
-			System.out.println("Some other error has occured. Closing program");
-			//s.close();
-			System.exit(1);
-		}*/
 	}
 
 }
