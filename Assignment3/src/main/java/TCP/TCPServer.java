@@ -67,6 +67,8 @@ public class TCPServer {
 				handler.setClientName(obj.getString("name"));	
 			}
 			boolean complete = false;
+			while (!complete) {
+
 
 			/*
 			recv = handler.recvMessage();
