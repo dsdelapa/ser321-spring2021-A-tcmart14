@@ -50,7 +50,7 @@ public class TCPServer {
 			handler.setInputStream(client.getInputStream());
 
 			System.out.println("Start delay.....");
-			TimeUnit.SECONDS.sleep(3 );
+			TimeUnit.SECONDS.sleep(3);
 			System.out.println("End Delay.....");
 
 		} catch (Exception e) {
