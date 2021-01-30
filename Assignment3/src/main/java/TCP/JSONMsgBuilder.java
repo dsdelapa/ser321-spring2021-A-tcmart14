@@ -1,6 +1,7 @@
 package TCP;
 
 import org.json.*;
+import TCP.JSONMessageParser;
 
 public class JSONMsgBuilder {
 
