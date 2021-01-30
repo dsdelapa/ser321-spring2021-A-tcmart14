@@ -38,4 +38,10 @@ public class JSONMsgBuilder {
 		return json.toString();
 	}
 
+	public static String appendResponse (String source, String newKey, String newValue) {
+		JSONObject obj = JSONMessageParser.getJSONObject(source);
+		obj.put(newKey, newValue);
+		return obj.toString();
+	}
+
 }
