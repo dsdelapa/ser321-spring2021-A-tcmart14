@@ -1,4 +1,4 @@
-apply plugin : 'java'
+apply plugin : 'application'
 
 description = "QA client and server program"
 

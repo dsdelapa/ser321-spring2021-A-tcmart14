@@ -2,7 +2,6 @@ package TCP;
 
 import java.net.*;
 import java.nio.charset.*;
-import TCP.EncoderDecoder;
 import TCP.TCPCommunicationHandler;
 import org.json.*;
 import TCP.JSONMsgBuilder;
@@ -26,29 +25,45 @@ public class TCPClient {
 	}
 
 	public void start () {
-		s = null;
-		handler = null;
-		scanner = null;
+		this.s = null;
+		this.handler = null;
+		this.scanner = null;
 		System.out.println("Game is initializing......");
 		try {
+			scanner = new Scanner(System.in);
 			s = new Socket(hostname, port);
 			handler = new TCPCommunicationHandler();
+			handler.setInputStream(s.getInputStream());
 			handler.setOutputStream(s.getOutputStream());
-			handler.setInputStream(this.s.getInputStream());
-			scanner = new Scanner(System.in);
+
+			System.out.println("Waiting for message");
+			if (s == null || handler == null) {
+				System.out.println("something failed");
+				throw new Exception();
+			}
+			String recv;
+			recv = handler.recvMessage();
+			System.out.print("Respond: ");
+			String response = scanner.nextLine();
+			String jsonResponse = JSONMsgBuilder.getResponse("name", response);
+			handler.sendMessage(jsonResponse);
 		} catch (Exception e) {
 			System.out.println("Could not connect to server and establish communications");
 			System.exit(1);
 		}
 		System.out.println("Game resources initialized");
-		try{
+		/*try{
 			//String recv = handler.recvMessage();
 			//System.out.println("Received message!");
 			System.out.println("Waiting for message");
-			String recv = handler.recvMessage();
-			System.out.println(recv);
+			if (s == null || handler == null) {
+				System.out.println("something failed");
+				throw new Exception();
+			}
+			String recv;
+			recv = handler.recvMessage();
 			System.out.print("Respond: ");
-			String response = "todd";
+			String response = scanner.nextLine();
 			String jsonResponse = JSONMsgBuilder.getResponse("name", response);
 			handler.sendMessage(jsonResponse);
 		} catch (IOException e) {
@@ -59,7 +74,7 @@ public class TCPClient {
 			System.out.println("Some other error has occured. Closing program");
 			//s.close();
 			System.exit(1);
-		}
+		}*/
 	}
 
 }

@@ -60,8 +60,6 @@ public class TCPServer {
 		try {
 			System.out.println("Sending first message");
 			handler.sendMessage(this.startMessage());
-			System.out.println("Message sent");
-			handler.sendMessage(this.startMessage());
 			String recv = handler.recvMessage();
 			JSONObject obj = JSONMessageParser.getJSONObject(recv);
 			

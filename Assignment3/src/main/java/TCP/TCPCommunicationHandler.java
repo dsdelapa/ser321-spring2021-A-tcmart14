@@ -31,11 +31,11 @@ public class TCPCommunicationHandler {
 
 	public String recvMessage () throws Exception {
 		byte array[] = new byte[1024];
-		in.readFully(array);
+		in.read(array, 0, 1024);
 		return EncoderDecoder.decodeString(array);
 	}
 
 
 
 
-}
+} 
