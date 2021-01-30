@@ -2,3 +2,33 @@ apply plugin : 'java'
 
 description = "QA client and server program"
 
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile group: 'org.json', name: 'json', version: '20200518' 
+}
+
+task runServer(type: JavaExec) {
+	group 'TCP'
+	description 'TCP Server for QA Game'
+
+	classpath = sourceSets.main.runtimeClasspath
+
+	main = 'TCP.TCPServer'
+	standardInput = System.in
+	print standardOutput.toString()
+}
+
+task runClient(type: JavaExec) {
+	group 'TCP'
+	description 'TCP Client for QA Game'
+
+	classpath = sourceSets.main.runtimeClasspath
+
+	main = 'TCP.TCPClient'
+	standardInput = System.in
+	standardOutput = System.out
+}
+
