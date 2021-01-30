@@ -28,8 +28,8 @@ public class TCPCommunicationHandler {
 		clientName = initClientName;
 	}
 
-	public String getClientNme () {
-		return clientNme;
+	public String getClientName () {
+		return clientName;
 	}
 
 	public void sendMessage (String source) throws Exception {
