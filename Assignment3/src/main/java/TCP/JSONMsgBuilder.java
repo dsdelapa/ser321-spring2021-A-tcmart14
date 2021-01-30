@@ -19,7 +19,6 @@ public class JSONMsgBuilder {
 	}
 
 	public static String getResponse (String type, String response) {
-		String message;
 		JSONObject json;
 		if (type.equals("answer")) {
 			json = new JSONObject()
@@ -36,7 +35,7 @@ public class JSONMsgBuilder {
 		} else {
 			return null;
 		}
-		return null;
+		return json.toString();
 	}
 
 }
