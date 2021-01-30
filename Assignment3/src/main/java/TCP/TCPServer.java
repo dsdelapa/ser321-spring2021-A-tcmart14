@@ -68,10 +68,11 @@ public class TCPServer {
 			}
 			String message = JSONMsgBuilder.getResponsse("number", "How many questions do you want?");
 			message = JSONMsgBuilder.appendResponse(message, "name", handler.getClientName);
+			System.out.println(message);
 			boolean complete = false;
-			while (!complete) {
+			//while (!complete) {
 
-			}
+			//}
 
 			/*
 			recv = handler.recvMessage();
