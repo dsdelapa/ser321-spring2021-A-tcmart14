@@ -49,7 +49,6 @@ public class TCPClient {
 			System.out.println(response);
 			String jsonResponse = JSONMsgBuilder.getResponse("name", response);
 			System.out.println(jsonResponse);
-			TimeUnit.SECONDS.sleep(3);
 			handler.sendMessage(jsonResponse);
 
 			System.out.println("Transaction completed on thius end. no error");
