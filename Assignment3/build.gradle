@@ -19,6 +19,10 @@ task runServer(type: JavaExec) {
 	main = 'TCP.TCPServer'
 	standardInput = System.in
 	print standardOutput.toString()
+	if (project.hasProperty('port')) {
+		args(project.getProperty('port'));
+	}
+
 }
 
 task runClient(type: JavaExec) {
@@ -30,5 +34,9 @@ task runClient(type: JavaExec) {
 	main = 'TCP.TCPClient'
 	standardInput = System.in
 	standardOutput = System.out
+
+	if (project.hasProperty("host") && project.hasProperty('port')) {
+		args(project.getProperty('host'), project.getProperty('port'));
+	}
 }
 
