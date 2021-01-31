@@ -45,12 +45,9 @@ public class TCPClient {
 			String recv;
 			recv = handler.recvMessage();
 			String response = scanner.nextLine();
-			System.out.println(response);
 			String jsonResponse = JSONMsgBuilder.getResponse("name", response);
-			System.out.println(jsonResponse);
 			handler.sendMessage(jsonResponse);
 
-			System.out.println("Transaction completed on thius end. no error");
 		} catch (Exception e) {
 			System.out.println("Could not connect to server and establish communications");
 			System.exit(1);
