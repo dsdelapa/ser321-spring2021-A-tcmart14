@@ -7,6 +7,8 @@ import TCP.EncoderDecoder;
 public class TCPCommunicationHandler {
 
 	private String clientName;
+	private int numQuestions;
+	private int correctAnswers;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
 
@@ -28,8 +30,16 @@ public class TCPCommunicationHandler {
 		clientName = initClientName;
 	}
 
+	public void setNumQuestions (int initNumQuestions) {
+		numQuestions = initNumQuestions;
+	}
+
 	public String getClientName () {
 		return clientName;
+	}
+
+	public int getNumQuestions () {
+		return numQuestions;
 	}
 
 	public void sendMessage (String source) throws Exception {
@@ -44,7 +54,13 @@ public class TCPCommunicationHandler {
 		return EncoderDecoder.decodeString(array);
 	}
 
+	public void isCorrect() {
+		correctAnswers++;
+	}
 
+	public int getCorrectAnswers () {
+		return correctAnswers;
+	}
 
 
 } 
