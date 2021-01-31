@@ -23,7 +23,7 @@ public class TCPClient {
 
 		TCPClient client = new TCPClient();
 		client.port = 8080;
-		client.hostname = "192.168.0.55";
+		client.hostname = "localhost";
 		client.start();
 	}
 
