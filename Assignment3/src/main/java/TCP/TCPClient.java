@@ -44,7 +44,6 @@ public class TCPClient {
 			}
 			String recv;
 			recv = handler.recvMessage();
-			System.out.print("Respond: ");
 			String response = scanner.nextLine();
 			System.out.println(response);
 			String jsonResponse = JSONMsgBuilder.getResponse("name", response);
