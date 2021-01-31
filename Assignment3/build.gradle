@@ -19,6 +19,7 @@ task runServer(type: JavaExec) {
 	main = 'TCP.TCPServer'
 	standardInput = System.in
 	print standardOutput.toString()
+
 	if (project.hasProperty('port')) {
 		args(project.getProperty('port'));
 	}
