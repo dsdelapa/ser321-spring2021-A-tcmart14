@@ -7,13 +7,6 @@ import UDP.*;
 
 public class UDPServer {
 
-	private DatagramSocket ss;
-	private DatagramPacket recvP;
-	private DatagramPacket sendP;
-	private int state;
-	private InetAddress ip;
-	private int clientPort;
-
 	/**
 	* state represents where the program is in execution
 	* state 0 is asking for client name
@@ -22,7 +15,7 @@ public class UDPServer {
 	* state 3 is received client number;
 	*/
 
-	public static void main (String[] args) {
+	public static void main (String[] args) throws IOException {
 		int initPort;
 
 		if (args.length != 1) {
@@ -31,30 +24,34 @@ public class UDPServer {
 			initPort = Integer.parseInt(args[0]);
 		}
 
-		UDPServer server = new UDPServer();
-		server.run(initPort);
-	}	
-
-	public void run (int port) {
 		try {
-			ss = new DatagramSocket(port);
+			//ss = null;
+			DatagramSocket ss = null;
+			try {
+				ss = new DatagramSocket();
+				ss.bind(new InetSocketAddress(initPort));
+			} catch (Exception e) {
+				System.out.println("Issue bidning to port");
+				System.exit(1);
+			}
 
-			recvP = null;
-			sendP = null;
-			ip = null;
-			clientPort = 0;
+			 DatagramPacket recvP = null;
+			 DatagramPacket sendP = null;
+			 int state = 0;
+		 	 InetAddress ip = null;
+			 int clientPort = 0;
+
 			JSONObject data;
-			state = 0;
 			String recvM;
 			String clientName;
 			
 			while (state != 5) {
-				this.recvData(); // throw away data to get client informtion
+				recvData(clientPort, ip, recvP, ss); // throw away data to get client informtion
 				data = JSONMesgBuilder.startNewMessage();
 				data = JSONMesgBuilder.addData(data, "type", "message");
 				data = JSONMesgBuilder.addData(data, "question", "What is your name");
-				this.sendData(data);
-				recvM = this.recvData();
+				sendData(clientPort, ip, sendP, data, ss);
+				recvM = recvData(clientPort, ip, recvP, ss);
 				data = JSONParser.getJSON(recvM);
 				if (data.getString("TYPE").equals("ANSWER")) {
 					clientName = data.getString("ANSWER");
@@ -64,15 +61,16 @@ public class UDPServer {
 
 			}
 
+			ss.close();
 
 		} catch (Exception e) {
 			System.out.println("Could not bind to port. Exiting");
 			System.exit(1);
 		}
+		
+	}	
 
-	}
-
-	public void sendData (JSONObject message) throws Exception {
+	public static void sendData (int clientPort, InetAddress ip, DatagramPacket sendP, JSONObject message, DatagramSocket ss) throws Exception {
 		String mess = JSONMesgBuilder.getString(message);
 		String capMessage = mess.toUpperCase();
 		byte[] sendData = capMessage.getBytes();
@@ -81,7 +79,7 @@ public class UDPServer {
 		
 	}
 
-	public String recvData () throws Exception {
+	public static String recvData (int clientPort, InetAddress ip, DatagramPacket recvP, DatagramSocket ss) throws Exception {
 		byte[] recv = new byte[1024];
 		recvP = new DatagramPacket(recv, recv.length);
 		if (ip == null) {
