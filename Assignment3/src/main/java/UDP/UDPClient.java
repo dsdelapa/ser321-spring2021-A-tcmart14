@@ -52,9 +52,24 @@ public class UDPClient {
 			try {
 				this.pollForHost();
 				raw = this.recvData();
+				//System.out.println(raw);
 				data = JSONParser.getJSON(raw);
 				if (data.getString("TYPE").equals("QUESTION")) {
 					System.out.println(data.getString("QUESTION"));
+					//System.out.println("error here?");
+					raw = buffR.readLine();
+					data = JSONMesgBuilder.startNewMessage();
+					data = JSONMesgBuilder.addData(data, "type", "answer");
+					data = JSONMesgBuilder.addData(data, "answer", raw);
+					//raw = JSONMesgBuilder.getString(data);
+					this.sendData(data);
+				}
+				raw = this.recvData();
+				//System.out.println(raw);
+				data = JSONParser.getJSON(raw);
+				if (data.getString("TYPE").equals("QUESTION")) {
+					System.out.println(data.getString("QUESTION"));
+					//System.out.println("error here?");
 					raw = buffR.readLine();
 					data = JSONMesgBuilder.startNewMessage();
 					data = JSONMesgBuilder.addData(data, "type", "answer");
@@ -64,7 +79,7 @@ public class UDPClient {
 				}
 			} catch (Exception e) {
 				System.out.println("Error occued");
-				continue;
+				System.exit(1);
 			}
 		}
 
@@ -75,6 +90,7 @@ public class UDPClient {
 		String capMessage = mess.toUpperCase();
 		byte[] sendData = capMessage.getBytes();
 		sendP = new DatagramPacket(sendData, sendData.length, this.ip, this.port);
+		sendP.setLength(capMessage.length());
 		ds.send(sendP);
 	}
 
@@ -88,7 +104,8 @@ public class UDPClient {
 	public String recvData () throws Exception {
 		byte[] recv = new byte[1024];
 		recvP = new DatagramPacket(recv, recv.length);
-		String data = new String(recvP.getData());
+		ds.receive(recvP);
+		String data = new String(recvP.getData(), 0, recvP.getLength());
 		return data;
 	}
 
