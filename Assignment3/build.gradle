@@ -40,3 +40,34 @@ task runClient(type: JavaExec) {
 	}
 }
 
+task runUDPServer(type: JavaExec) {
+	group 'UDP'
+	description 'UDP Server for QA Game'
+
+	classpath = sourceSets.main.runtimeClasspath
+
+	main = 'UDP.UDPServer'
+	standardInput = System.in
+	print standardOutput.toString()
+
+	if (project.hasProperty('port')) {
+		args(project.getProperty('port'));
+	}
+
+}
+
+task runUDPClient(type: JavaExec) {
+	group 'UDP'
+	description 'UDP Client for QA Game'
+
+	classpath = sourceSets.main.runtimeClasspath
+
+	main = 'UDP.UDPClient'
+	standardInput = System.in
+	standardOutput = System.out
+
+	if (project.hasProperty("host") && project.hasProperty('port')) {
+		args(project.getProperty('host'), project.getProperty('port'));
+	}
+}
+
