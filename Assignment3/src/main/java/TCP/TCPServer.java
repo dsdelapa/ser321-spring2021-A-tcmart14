@@ -22,8 +22,14 @@ public class TCPServer {
 	private TCPCommunicationHandler handler;
 
 	public static void main (String[] args) {
+		int initPort = 0;
+		if (args.length != 1) {
+			initPort = 8080;
+		} else {
+			initPort = Integer.parseInt(args[0]);
+		}
 		TCPServer server = new TCPServer();
-		server.port = 8080;
+		server.port = initPort;
 		server.run();
 	}
 
@@ -32,6 +38,7 @@ public class TCPServer {
 		//ObjectOutputStream out = null;
 		//ObjectInputStream in = null;
 		//handler = new TCPCommunicationHandler();
+
 		try {
 			ss = new ServerSocket(port);
 			handler = new TCPCommunicationHandler();
@@ -62,7 +69,6 @@ public class TCPServer {
 			}
 
 			try {
-				System.out.println("Sending first message");
 				handler.sendMessage(this.startMessage());
 				String recv = handler.recvMessage();
 				JSONObject obj = JSONMessageParser.getJSONObject(recv);
@@ -146,7 +152,6 @@ public class TCPServer {
 				//System.out.println(handler.getNumQuestions());
 				try {//System.out.println("Number of questions:" + handler.getNumQuestions());
 					recv = handler.recvMessage();
-					System.out.println("here");
 					obj = JSONMessageParser.getJSONObject(recv);
 					if (obj.getString("type").equals("message") && obj.getString("message").equals("start")) {
 						System.out.println("start game");
@@ -199,22 +204,18 @@ public class TCPServer {
 
 	private void sendError (String initialMessage) throws IOException {
 		String errorMessage = JSONMsgBuilder.appendResponse(initialMessage, "error", "incorrect input");
-		System.out.println(errorMessage);
 		try {
 			//System.out.println("fail 7");
 			handler.sendMessage(errorMessage);
 		} catch (Exception e) {
-			System.out.println("fail 8");
 			throw new IOException();
 		}
 	}
 
 	private void gameLoop() throws IOException, Exception {
-		System.out.println("hi");
 		int timeLimit = handler.getNumQuestions() * 5;
 		System.out.println("Time limit: " + timeLimit);
 		Questions q = new Questions();
-		System.out.println("hello");
 		int questionNum = 0;
 		String recv;
 		String msg;
@@ -222,7 +223,6 @@ public class TCPServer {
 		//Clock clock = new Clock();
 		long startTime = System.currentTimeMillis();
 		long dt = 0;
-		System.out.println("1");
 		for (int i = 0; i < handler.getNumQuestions(); i++) {
 			String temp = q.getQuestion();
 			String qa[] = temp.split("/");
