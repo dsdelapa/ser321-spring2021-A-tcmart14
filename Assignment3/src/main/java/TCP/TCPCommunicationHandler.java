@@ -15,6 +15,7 @@ public class TCPCommunicationHandler {
 	public TCPCommunicationHandler () {
 		out = null;
 		in = null;
+		correctAnswers = 0;
 	}
 
 	public void setOutputStream (OutputStream initOut) throws Exception {
