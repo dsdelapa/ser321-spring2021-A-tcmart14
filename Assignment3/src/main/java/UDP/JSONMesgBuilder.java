@@ -10,7 +10,7 @@ public class JSONMesgBuilder {
 	}
 
 	public static JSONObject addData (JSONObject obj, String key, String message) {
-		obj.append(key, message);
+		obj.put(key, message);
 		return obj;
 	}
 
