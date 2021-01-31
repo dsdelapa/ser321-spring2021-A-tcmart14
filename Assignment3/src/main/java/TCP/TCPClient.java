@@ -21,9 +21,20 @@ public class TCPClient {
 
 	public static void main (String[] args) {
 
+		String initHost;
+		int initPort;
+
+		if (args.length != 2) {
+			initHost = "localhost";
+			initPort = 8080;
+		} else {
+			initPort = Integer.parseInt(args[1]);
+			initHost = args[0];
+		}
+
 		TCPClient client = new TCPClient();
-		client.port = 8080;
-		client.hostname = "localhost";
+		client.port = initPort;
+		client.hostname = initHost;
 		client.start();
 	}
 
@@ -45,7 +56,7 @@ public class TCPClient {
 			String recv;
 			recv = handler.recvMessage();
 			JSONObject msgObj = JSONMessageParser.getJSONObject(recv);
-			System.out.print(msgObj.getString("question"));
+			System.out.println(msgObj.getString("question"));
 			String response = scanner.nextLine();
 			//System.out.println(response);
 			String jsonResponse = JSONMsgBuilder.getResponse("name", response);
@@ -73,9 +84,7 @@ public class TCPClient {
 						System.exit(1);
 					}
 				}
-				System.out.println("made it here");
 				recv = handler.recvMessage();
-				System.out.println(recv);
 				msgObj = JSONMessageParser.getJSONObject(recv);
 				if (msgObj.getString("type").equals("message")) {
 					if (msgObj.getString("message").equals("ready")) {
@@ -129,7 +138,6 @@ public class TCPClient {
 				}		
 				
 			}
-			System.out.println("Transaction completed on this end. no error");
 		} catch (IOException e) {
 			System.out.println("Could not connect to server and establish communications");
 			System.exit(1);
