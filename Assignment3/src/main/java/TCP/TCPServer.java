@@ -240,7 +240,7 @@ public class TCPServer {
 			}
 			JSONObject obj = JSONMessageParser.getJSONObject(recv);
 			if (obj.getString("type").equals("answer") && !obj.getString("answer").equals("next")) {
-				if (!obj.isNull("answer")) {
+				if (!obj.isNull("answer") && obj.getString("answer").equals(answer)) {
 					handler.isCorrect();	
 				} else if (obj.isNull("answer")) {
 					continue;
@@ -262,7 +262,7 @@ public class TCPServer {
 		}
 
 
-		if (handler.getCorrectAnswers() == (handler.getNumQuestions() - 1) && dt >= (timeLimit * 1000)) {
+		if (handler.getCorrectAnswers() == (handler.getNumQuestions() - 1) && dt <= (timeLimit * 1000)) {
 			win = true;
 		} else {
 			win = false;
@@ -275,6 +275,7 @@ public class TCPServer {
 			msg = JSONMsgBuilder.getResponse("message", "lose");
 			handler.sendMessage(msg);
 		}
+		handler.resetCorrectAnswers();
 
 	}
 }

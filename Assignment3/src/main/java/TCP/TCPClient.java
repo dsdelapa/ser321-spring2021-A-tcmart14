@@ -115,9 +115,11 @@ public class TCPClient {
 						if (msgObj.getString("message").equals("win")) {
 							win = true;
 							done = true;
+							System.out.println("You won!");
 						} else if (msgObj.getString("message").equals("lose")) {
 							win = false;
 							done = true;
+							System.out.println("You lose!");
 						}
 					}
 				}

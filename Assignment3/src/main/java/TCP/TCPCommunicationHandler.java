@@ -59,6 +59,10 @@ public class TCPCommunicationHandler {
 		correctAnswers++;
 	}
 
+	public void resetCorrectAnswers() {
+		correctAnswers = 0;
+	}
+
 	public int getCorrectAnswers () {
 		return correctAnswers;
 	}
