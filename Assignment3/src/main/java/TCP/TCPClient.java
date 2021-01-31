@@ -38,8 +38,6 @@ public class TCPClient {
 			handler = new TCPCommunicationHandler();
 			handler.setInputStream(s.getInputStream());
 			handler.setOutputStream(s.getOutputStream());
-
-			System.out.println("Waiting for message");
 			if (s == null || handler == null) {
 				System.out.println("something failed");
 				throw new Exception();
