@@ -33,6 +33,9 @@ public class JSONMsgBuilder {
 		} else if (type.equals("message")) {
 			json = new JSONObject()
 				.put(type, response).put("type", type);
+		} else if (type.equals("question")) {
+			json = new JSONObject()
+				.put(type, response).put("type", type);
 		} else {
 			return null;
 		}
