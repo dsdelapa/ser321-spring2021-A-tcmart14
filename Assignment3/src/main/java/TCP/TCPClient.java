@@ -44,12 +44,97 @@ public class TCPClient {
 			}
 			String recv;
 			recv = handler.recvMessage();
+			JSONObject msgObj = JSONMessageParser.getJSONObject(recv);
+			System.out.print(msgObj.getString("question"));
 			String response = scanner.nextLine();
+			//System.out.println(response);
 			String jsonResponse = JSONMsgBuilder.getResponse("name", response);
+			//System.out.println(jsonResponse);
 			handler.sendMessage(jsonResponse);
+			//System.out.println("response sent with name");
+			boolean playAgain = true;
+			while (playAgain) {
+				recv = handler.recvMessage();
+				msgObj = JSONMessageParser.getJSONObject(recv);
+				boolean correct = false;
+				while (!correct) {
+					try {
+						System.out.print("Enter the number of questions you want: ");
+						scanner = new Scanner(System.in);
+						int numQ = scanner.nextInt();
+						String temp = Integer.toString(numQ);
+						String tempResponse = JSONMsgBuilder.getResponse("number", temp);
+						handler.sendMessage(tempResponse);
+						correct = true;
+					} catch (InputMismatchException e) {
+						continue;
+					} catch (IOException e) {
+						System.out.println("issues communicating with server, disconnecting");
+						System.exit(1);
+					}
+				}
+				System.out.println("made it here");
+				recv = handler.recvMessage();
+				System.out.println(recv);
+				msgObj = JSONMessageParser.getJSONObject(recv);
+				if (msgObj.getString("type").equals("message")) {
+					if (msgObj.getString("message").equals("ready")) {
+						System.out.println("Type start when ready to start game: ");
+						scanner = new Scanner(System.in);
+						//response = new String();
+						response = scanner.nextLine();
+						//System.out.println("response here: " + response);
+						jsonResponse = JSONMsgBuilder.getResponse("message", response);
+						handler.sendMessage(jsonResponse);
+					}
+				} else {
+					throw new Exception();
+				}
 
-		} catch (Exception e) {
+				boolean win = false;
+				boolean done = false;
+				while (!done) {
+					recv = handler.recvMessage();
+					msgObj = JSONMessageParser.getJSONObject(recv);
+					if (msgObj.getString("type").equals("question")) {
+						System.out.println(msgObj.getString("question"));
+						scanner = new Scanner(System.in);
+						response = scanner.nextLine();
+						jsonResponse = JSONMsgBuilder.getResponse("answer", response);
+						handler.sendMessage(jsonResponse);
+					} else if (msgObj.getString("type").equals("message")) {
+						if (msgObj.getString("message").equals("win")) {
+							win = true;
+							done = true;
+						} else if (msgObj.getString("message").equals("lose")) {
+							win = false;
+							done = true;
+						}
+					}
+				}
+
+				recv = handler.recvMessage();
+				msgObj = JSONMessageParser.getJSONObject(recv);
+				if (msgObj.getString("type").equals("question")) {
+					System.out.println(msgObj.getString("question"));
+					scanner = new Scanner(System.in);
+					response = scanner.nextLine();
+					if (response.equals("yes")) {
+						playAgain = true;
+					} else {
+						playAgain = false;
+					}
+					jsonResponse = JSONMsgBuilder.getResponse("answer", response);
+					handler.sendMessage(jsonResponse);
+				}		
+				
+			}
+			System.out.println("Transaction completed on this end. no error");
+		} catch (IOException e) {
 			System.out.println("Could not connect to server and establish communications");
+			System.exit(1);
+		} catch (Exception e) {
+			System.out.println("Issue handling data");
 			System.exit(1);
 		}
 	}
