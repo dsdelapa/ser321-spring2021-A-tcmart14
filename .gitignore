@@ -1,2 +1,11 @@
 */.DS_Store
 .DS_Store
+*/build*
+Assignment3/.gradle/6.6.1/executionHistory/executionHistory.bin
+Assignment3/.gradle/6.6.1/fileHashes/fileHashes.lock
+Assignment3/.gradle/6.6.1/fileHashes/fileHashes.bin
+Assignment3/.gradle/6.6.1/executionHistory/executionHistory.lock
+Assignment3/.gradle/6.6.1/executionHistory/executionHistory.bin
+Assignment3/.gradle/buildOutputCleanup/buildOutputCleanup.lock
+Assignment3/.gradle/6.6.1/javaCompile/javaCompile.lock
+*.lock
