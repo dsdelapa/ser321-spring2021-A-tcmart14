@@ -7,44 +7,44 @@ class StringList {
     
     List<String> strings = new ArrayList<String>();
 
-    public void add(String str) {
+    public synchronized void add(String str) {
         int pos = strings.indexOf(str);
         if (pos < 0) {
             strings.add(str);
         }
     }
 
-    public boolean contains(String str) {
+    public synchronized boolean contains(String str) {
         return strings.indexOf(str) >= 0;
     }
 
-    public int size() {
+    public synchronized int size() {
         return strings.size();
     }
 
-    public String toString() {
+    public synchronized String toString() {
         return strings.toString();
     }
 
-    public String pop () {
+    public synchronized String pop () {
         if (this.size() == 0)
             return "null";
 
         return strings.get(this.size()-1);
     }
 
-    public String count () {
+    public synchronized String count () {
         return Integer.toString(this.size());
     }
 
-    public String display () {
+    public synchronized String display () {
         String temp = "";
         for (String s : strings)
             temp = temp + s + "\n";
         return temp;
     }
 
-    public boolean switch_elements (String in) {
+    public synchronized boolean switch_elements (String in) {
         String temp[] = in.split(" ");
         int indexOne = Integer.parseInt(temp[0]);
         int indexTwo = Integer.parseInt(temp[1]);
