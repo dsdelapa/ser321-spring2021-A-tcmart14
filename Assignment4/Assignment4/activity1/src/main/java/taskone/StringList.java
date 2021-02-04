@@ -36,4 +36,11 @@ class StringList {
     public String count () {
         return Integer.toString(this.size());
     }
+
+    public String display () {
+        String temp = "";
+        for (String s : strings)
+            temp = temp + s + "\n";
+        return temp;
+    }
 }
