@@ -25,4 +25,7 @@ class StringList {
     public String toString() {
         return strings.toString();
     }
+    public String count () {
+        return Integer.toString(this.size());
+    }
 }
