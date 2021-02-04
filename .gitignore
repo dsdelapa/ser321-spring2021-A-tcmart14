@@ -34,3 +34,5 @@ Assignment3/.gradle/6.6.1/executionHistory/executionHistory.bin
 */.classpath
 */.project
 Assignment4/Assignment4/activity1/build/classes/java/main/taskone/ThreadedServer.class
+Assignment4/Assignment4/activity1/build/classes/java/main/taskone/ThreadPoolServer.class
+Assignment4/Assignment4/activity1/build/classes/java/main/taskone/Worker.class
