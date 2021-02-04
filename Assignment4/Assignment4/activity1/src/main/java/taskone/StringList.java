@@ -43,4 +43,19 @@ class StringList {
             temp = temp + s + "\n";
         return temp;
     }
+
+    public boolean switch_elements (String in) {
+        String temp[] = in.split(" ");
+        int indexOne = Integer.parseInt(temp[0]);
+        int indexTwo = Integer.parseInt(temp[1]);
+        if (indexOne < 0 || indexOne >= this.size())
+            return false;
+        if (indexTwo < 0 || indexTwo >= this.size())
+            return false;
+        String tempString = strings.get(indexOne);
+        strings.set(indexOne, strings.get(indexTwo));
+        strings.set(indexTwo, tempString);
+        return true;
+    }
+
 }
