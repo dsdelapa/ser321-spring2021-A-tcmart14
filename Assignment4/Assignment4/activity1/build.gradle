@@ -76,3 +76,20 @@ task runTask2(type: JavaExec) {
   }
 }
 
+task runTask3(type: JavaExec) {
+  group 'server'
+  description 'Creates Server socket waits for messages'
+
+  classpath = sourceSets.main.runtimeClasspath
+
+  main = 'taskone.ThreadPoolServer'
+  standardInput = System.in
+  
+  // run with arguments e.g.: gradle runServer -Pport=9099 -q --console=plain
+  if (project.hasProperty('port') && project.hasProperty('workers')) {
+    args(project.getProperty('port'), project.getProperty('workers'));
+  } else {
+    args(8000, 5);
+  }
+}
+
