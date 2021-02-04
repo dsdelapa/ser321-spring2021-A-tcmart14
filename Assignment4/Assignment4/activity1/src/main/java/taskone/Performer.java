@@ -40,7 +40,7 @@ class Performer {
         return json;
     }
 
-    public JSONObject count(String str) {
+    public JSONObject count() {
         JSONObject json = new JSONObject();
         json.put("datatype", 1);
         json.put("type", "count");
@@ -88,8 +88,7 @@ class Performer {
                             returnMessage = pop();
                             break;
                         case (4):
-                            inStr = (String) message.get("data");
-                            returnMessage = count(inStr);
+                            returnMessage = count();
                             break;
                         default:
                             returnMessage = error("Invalid selection: " + choice 
