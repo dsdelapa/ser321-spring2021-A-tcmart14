@@ -67,6 +67,18 @@ class Performer {
         return json;
     }
 
+    public JSONObject switch_elements (String in) {
+        JSONObject json = new JSONObject();
+        json.put("datatype",1);
+        json.put("type","switch");
+        if (!state.switch_elements(in)) {
+            json.put("data", "null");
+            return json;
+        }
+        json.put("data","success");
+        return json;
+    }
+
     public static JSONObject error(String err) {
         JSONObject json = new JSONObject();
         json.put("error", err);
@@ -100,6 +112,10 @@ class Performer {
                             break;
                         case (4):
                             returnMessage = count();
+                            break;
+                        case (5):
+                            String temp = (String) message.get("data");
+                            returnMessage = switch_elements(temp);
                             break;
                         default:
                             returnMessage = error("Invalid selection: " + choice 
