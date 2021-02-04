@@ -58,6 +58,15 @@ class Performer {
         return json;
     }
 
+    public JSONObject display() {
+        JSONObject json = new JSONObject();
+        json.put("datatype",1);
+        json.put("type","display");
+        String temp = state.display();
+        json.put("data", temp);
+        return json;
+    }
+
     public static JSONObject error(String err) {
         JSONObject json = new JSONObject();
         json.put("error", err);
@@ -86,6 +95,9 @@ class Performer {
                         case (2):
                             //inStr = (String) message.get("data");
                             returnMessage = pop();
+                            break;
+                        case (3):
+                            returnMessage = display();
                             break;
                         case (4):
                             returnMessage = count();
