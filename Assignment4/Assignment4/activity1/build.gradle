@@ -54,6 +54,8 @@ task taskTwo(type: JavaExec) {
   // run with arguments e.g.: gradle runServer -Pport=9099 -q --console=plain
   if (project.hasProperty('port')) {
     args(project.getProperty('port'));
+  } else {
+    args(8000);
   }
 }
 
