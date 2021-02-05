@@ -46,6 +46,11 @@ public class Game {
         won = true;
     }
 
+    public boolean getWinStatus () {
+        won = (idx >= idxMax);
+        return (idx >= idxMax);
+    }
+
     /**
      * Method loads in a new image from the specified files and creates the hidden image for it. 
      * @return Nothing.
@@ -102,6 +107,16 @@ public class Game {
         }
         else {
         }
+    }
+
+    public int getHidden () {
+        int x = 0;
+        for (int r = 0; r < hidden.length; r++)
+            for (int c = 0; c < hidden[0].length; c++) {
+                if (hidden[r][c] == 'X')
+                    x++;
+            }
+        return x;
     }
 
     /**
