@@ -12,7 +12,7 @@ import buffers.RequestProtos.Message;
 import buffers.ResponseProtos.Response;
 import buffers.ResponseProtos.Entry;
 
-class SockBaseServer {
+class SockBaseServer implements Runnable {
     static String logFilename = "logs.txt";
 
     ServerSocket serv = null;
@@ -21,6 +21,7 @@ class SockBaseServer {
     Socket clientSocket = null;
     int port = 9099; // default port
     Game game;
+    Task tasks = new Task();
 
 
     public SockBaseServer(Socket sock, Game game){
@@ -34,10 +35,83 @@ class SockBaseServer {
         }
     }
 
+    public void sendLeaderBoard () {
+
+    }
+
+    public void playGame () {
+        Response resp;
+        int i = 1;
+        if (game.getWinStatus()) {
+            game.newGame();
+        }
+        while (!game.getWinStatus()) {
+            try {
+                gameTaskResponse(i);
+                i++;
+            } catch (Exception e) {
+                break;
+            }
+        }
+        if (game.getWinStatus()) {
+            try {
+                resp = Response.newBuilder()
+                    .setResponseType(Response.ResponseType.WON)
+                    .build();
+                    resp.writeDelimitedTo(out);
+            } catch (Exception e) {
+                System.out.println("Issue writing to client");
+            }
+        }
+        // check task
+    }
+
+    /*Response response2 = Response.newBuilder()
+                .setResponseType(Response.ResponseType.TASK)
+                .setImage(game.getImage())
+                .setTask("Great task goes here")
+                .build();
+    */
+    public void gameTaskResponse (int i) throws Exception {
+        taskings t = tasks.getTask();
+        Request req;
+        Response response = Response.newBuilder()
+            .setResponseType(Response.ResponseType.TASK)
+            .setImage(game.getImage())
+            .setTask(t.t)
+            .build();
+        try {
+            response.writeDelimitedTo(out);
+            req = Request.parseDelimitedFrom(in);
+            if (req.getOperationType() == Request.OperationType.ANSWER) {
+                String answer = req.getAnswer();
+                System.out.print("Received answer: " + answer);
+                if (answer.equals(t.ans)) {
+                    System.out.print(" and it was right!\n");
+                    if (i < game.getHidden()) {
+                        for (int j = 0; j < i; j++) {
+                            game.replaceOneCharacter();
+                        }
+                    } else {
+                        for (int j = 0; j < game.getHidden(); j++) {
+                            game.replaceOneCharacter();
+                        }
+                    }
+                    //System.out.println("Updated board");
+                } else {
+                    System.out.print(" and it was wrong!\n");
+                }
+                
+            }
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    }
+
     // Handles the communication right now it just accepts one input and then is done you should make sure the server stays open
     // can handle multiple requests and does not crash when the server crashes
     // you can use this server as based or start a new one if you prefer. 
-    public void start() throws IOException {
+    public void run() {
         String name = "";
 
 
@@ -52,25 +126,43 @@ class SockBaseServer {
             // if the operation is NAME (so the beginning then say there is a commention and greet the client)
             if (op.getOperationType() == Request.OperationType.NAME) {
                 // get name from proto object
-            name = op.getName();
+                name = op.getName();
 
             // writing a connect message to the log with name and CONNENCT
-            writeToLog(name, Message.CONNECT);
+                writeToLog(name, Message.CONNECT);
                 System.out.println("Got a connection and a name: " + name);
-                Response response = Response.newBuilder()
-                        .setResponseType(Response.ResponseType.GREETING)
-                        .setGreeting("Hello " + name + " and welcome. \nWhat would you like to do? \n 1 - to see the leader board \n 2 - to enter a game")
-                        .build();
-                response.writeDelimitedTo(out);
+            
+                while (true) {
+                    Response response = Response.newBuilder()
+                            .setResponseType(Response.ResponseType.GREETING)
+                            .setGreeting("Hello " + name + " and welcome. \nWhat would you like to do? \n 1 - to see the leader board \n 2 - to enter a game")
+                            .build();
+                    response.writeDelimitedTo(out);
+                    System.out.println("written greeting to client");
+
+                    op = Request.parseDelimitedFrom(in);
+                    switch (op.getOperationType()) {
+                        case LEADER:
+                            sendLeaderBoard();
+                            break;
+                        case NEW:
+                            playGame();
+                            break;
+                        default:
+                            break;
+                    }
+                    System.out.println("Time to start new iteration");
+                }
             }
 
             // Example how to start a new game and how to build a response with the image which you could then send to the server
             // LINE 67-108 are just an example for Protobuf and how to work with the differnt types. They DO NOT
             // belong into this code. 
-            game.newGame(); // starting a new game
+            //game.newGame(); // starting a new game
+            
 
             // adding the String of the game to 
-            Response response2 = Response.newBuilder()
+            /*Response response2 = Response.newBuilder()
                 .setResponseType(Response.ResponseType.TASK)
                 .setImage(game.getImage())
                 .setTask("Great task goes here")
@@ -107,13 +199,18 @@ class SockBaseServer {
             for (Entry lead: response3.getLeaderList()){
                 System.out.println(lead.getName() + ": " + lead.getWins());
             }
+            */
 
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            if (out != null)  out.close();
-            if (in != null)   in.close();
-            if (clientSocket != null) clientSocket.close();
+            try {
+                if (out != null)  out.close();
+                if (in != null)   in.close();
+                if (clientSocket != null) clientSocket.close();
+            } catch (IOException e) {
+                System.out.println("Issue closing out a client");
+            }
         }
     }
 
@@ -211,9 +308,12 @@ class SockBaseServer {
             System.exit(2);
         }
 
-        clientSocket = serv.accept();
-        SockBaseServer server = new SockBaseServer(clientSocket, game);
-        server.start();
+        while (true) {
+            clientSocket = serv.accept();
+            SockBaseServer server = new SockBaseServer(clientSocket, game);
+            Thread t = new Thread(server);
+            t.start();
+        }
 
     }
 }
