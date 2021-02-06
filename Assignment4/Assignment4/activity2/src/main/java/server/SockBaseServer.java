@@ -129,6 +129,9 @@ class SockBaseServer implements Runnable {
             // writing a connect message to the log with name and CONNENCT
                 writeToLog(name, Message.CONNECT);
                 System.out.println("Got a connection and a name: " + name);
+                // make entry
+                this.list.insertPlayer(name);
+                
             
                 while (true) {
                     Response response = Response.newBuilder()
