@@ -70,12 +70,6 @@ class SockBaseServer implements Runnable {
         // check task
     }
 
-    /*Response response2 = Response.newBuilder()
-                .setResponseType(Response.ResponseType.TASK)
-                .setImage(game.getImage())
-                .setTask("Great task goes here")
-                .build();
-    */
     public void gameTaskResponse (int i) throws Exception {
         taskings t = tasks.getTask();
         Request req;
