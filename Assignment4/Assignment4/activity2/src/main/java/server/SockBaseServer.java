@@ -152,7 +152,7 @@ class SockBaseServer implements Runnable {
                         default:
                             break;
                     }
-                    System.out.println("Time to start new iteration");
+                    //System.out.println("Time to start new iteration");
                 }
             }
 
