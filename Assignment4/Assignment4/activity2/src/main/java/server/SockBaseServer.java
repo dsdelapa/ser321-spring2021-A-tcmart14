@@ -252,6 +252,7 @@ class SockBaseServer implements Runnable {
 
     public static void main (String args[]) throws Exception {
         Game game = new Game();
+        PlayerList l = new PlayerList();
 
         if (args.length != 2) {
             System.out.println("Expected arguments: <port(int)> <delay(int)>");
