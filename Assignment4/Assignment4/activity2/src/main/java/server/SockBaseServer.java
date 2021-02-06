@@ -157,7 +157,7 @@ class SockBaseServer implements Runnable {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println(name + ": QUIT");
         } finally {
             try {
                 if (out != null)  out.close();
