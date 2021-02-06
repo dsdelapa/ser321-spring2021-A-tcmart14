@@ -30,6 +30,7 @@ class SockBaseServer implements Runnable {
         this.clientSocket = sock;
         this.game = game;
         //this.player = p;
+        this.list = initL;
         try {
             in = clientSocket.getInputStream();
             out = clientSocket.getOutputStream();
