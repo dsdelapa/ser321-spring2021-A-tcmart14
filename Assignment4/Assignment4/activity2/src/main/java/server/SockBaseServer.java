@@ -22,6 +22,8 @@ class SockBaseServer implements Runnable {
     int port = 9099; // default port
     Game game;
     Task tasks = new Task();
+    private String name;
+    PlayerList list;
 
 
     public SockBaseServer(Socket sock, Game game, PlayerList initL){
