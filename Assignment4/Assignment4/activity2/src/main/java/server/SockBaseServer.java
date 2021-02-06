@@ -110,7 +110,7 @@ class SockBaseServer implements Runnable {
     // can handle multiple requests and does not crash when the server crashes
     // you can use this server as based or start a new one if you prefer. 
     public void run() {
-        String name = "";
+        name = "";
 
 
         System.out.println("Ready...");
