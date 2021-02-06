@@ -24,7 +24,7 @@ class SockBaseServer implements Runnable {
     Task tasks = new Task();
 
 
-    public SockBaseServer(Socket sock, Game game){
+    public SockBaseServer(Socket sock, Game game, PlayerList initL){
         this.clientSocket = sock;
         this.game = game;
         try {
