@@ -166,6 +166,7 @@ class SockBaseServer implements Runnable {
             } catch (IOException e) {
                 System.out.println("Issue closing out a client");
             }
+                //writeToLog(name, "QUIT");
         }
     }
 
