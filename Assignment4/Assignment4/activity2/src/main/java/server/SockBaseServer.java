@@ -61,6 +61,7 @@ class SockBaseServer implements Runnable {
                     .build();
                 resp.writeDelimitedTo(out);
                     writeToLog(name, Message.WIN);
+
             } catch (Exception e) {
                 System.out.println("Issue writing to client");
             }
