@@ -35,10 +35,6 @@ class SockBaseServer implements Runnable {
         }
     }
 
-    public void sendLeaderBoard () {
-
-    }
-
     public void playGame () {
         writeToLog(name, Message.START);
         Response resp;
