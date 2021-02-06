@@ -136,7 +136,7 @@ class SockBaseServer implements Runnable {
                 while (true) {
                     Response response = Response.newBuilder()
                             .setResponseType(Response.ResponseType.GREETING)
-                            .setGreeting("Hello " + name + " and welcome. \nWhat would you like to do? \n 1 - to see the leader board \n 2 - to enter a game")
+                            .setGreeting("Hello " + name + " and welcome. \nWhat would you like to do?\n 0 - Quit \n 1 - to see the leader board \n 2 - to enter a game \n")
                             .build();
                     response.writeDelimitedTo(out);
                     System.out.println("written greeting to client");
