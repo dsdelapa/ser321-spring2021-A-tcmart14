@@ -156,52 +156,6 @@ class SockBaseServer implements Runnable {
                 }
             }
 
-            // Example how to start a new game and how to build a response with the image which you could then send to the server
-            // LINE 67-108 are just an example for Protobuf and how to work with the differnt types. They DO NOT
-            // belong into this code. 
-            //game.newGame(); // starting a new game
-            
-
-            // adding the String of the game to 
-            /*Response response2 = Response.newBuilder()
-                .setResponseType(Response.ResponseType.TASK)
-                .setImage(game.getImage())
-                .setTask("Great task goes here")
-                .build();
-
-            // On the client side you would receive a Response object which is the same as the one in line 70, so now you could read the fields
-            System.out.println("Task: " + response2.getResponseType());
-            System.out.println("Image: \n" + response2.getImage());
-            System.out.println("Task: \n" + response2.getTask());
-
-            // Creating Entry and Leader response
-            Response.Builder res = Response.newBuilder()
-                .setResponseType(Response.ResponseType.LEADER);
-
-            // building and Entry
-            Entry leader = Entry.newBuilder()
-                .setName("name")
-                .setWins(0)
-                .setLogins(0)
-                .build();
-
-            // building and Entry
-            Entry leader2 = Entry.newBuilder()
-                .setName("name2")
-                .setWins(1)
-                .setLogins(1)
-                .build();
-
-            res.addLeader(leader);
-            res.addLeader(leader2);
-
-            Response response3 = res.build();
-
-            for (Entry lead: response3.getLeaderList()){
-                System.out.println(lead.getName() + ": " + lead.getWins());
-            }
-            */
-
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
