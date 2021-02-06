@@ -51,6 +51,11 @@ class SockBaseClient {
             Request op = askLeaderMessageBuilder();
             op.writeDelimitedTo(out);
             Response response = Response.parseDelimitedFrom(in);
+            System.out.println("###### LEADERBOARD ######");
+            for (Entry lead: response.getLeaderList()){
+                System.out.println(lead.getName() + ": " + lead.getWins());
+            }
+            System.out.println("\n\n");
         } catch (Exception e) {
             // fill later
         }
@@ -163,7 +168,7 @@ class SockBaseClient {
                         cont = false;
                         break;
                 }
-                System.out.println("Next iteration beginning");
+                //System.out.println("Next iteration beginning");
             }
         } catch (Exception e) {
             System.out.println("An error has occured. Exiting.....");

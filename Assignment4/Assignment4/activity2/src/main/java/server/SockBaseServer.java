@@ -40,6 +40,7 @@ class SockBaseServer implements Runnable {
     }
 
     public void playGame () {
+        writeToLog(name, Message.START);
         Response resp;
         int i = 1;
         if (game.getWinStatus()) {
