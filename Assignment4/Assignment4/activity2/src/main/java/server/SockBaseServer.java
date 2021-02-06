@@ -278,7 +278,7 @@ class SockBaseServer implements Runnable {
 
         while (true) {
             clientSocket = serv.accept();
-            SockBaseServer server = new SockBaseServer(clientSocket, game);
+            SockBaseServer server = new SockBaseServer(clientSocket, game, l);
             Thread t = new Thread(server);
             t.start();
         }
