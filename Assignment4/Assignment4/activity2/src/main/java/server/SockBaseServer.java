@@ -183,6 +183,18 @@ class SockBaseServer implements Runnable {
     }
 
 
+    public void sendLeaderBoard () {
+        Response response = this.list.getPlayerList();
+        try {
+            System.out.println("Response:");
+            System.out.println(response.toString());
+            response.writeDelimitedTo(out);
+        } catch (IOException e) {
+                System.out.println("Issue writing leaderboard to client.");
+        }
+    }
+
+
     /**
      * Writing a new entry to our log
      * @param name - Name of the person logging in
