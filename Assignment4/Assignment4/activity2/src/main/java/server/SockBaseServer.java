@@ -60,6 +60,7 @@ class SockBaseServer implements Runnable {
                     .setResponseType(Response.ResponseType.WON)
                     .build();
                 resp.writeDelimitedTo(out);
+                    writeToLog(name, Message.WIN);
             } catch (Exception e) {
                 System.out.println("Issue writing to client");
             }
