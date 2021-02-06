@@ -59,7 +59,7 @@ class SockBaseServer implements Runnable {
                 resp = Response.newBuilder()
                     .setResponseType(Response.ResponseType.WON)
                     .build();
-                    resp.writeDelimitedTo(out);
+                resp.writeDelimitedTo(out);
             } catch (Exception e) {
                 System.out.println("Issue writing to client");
             }
