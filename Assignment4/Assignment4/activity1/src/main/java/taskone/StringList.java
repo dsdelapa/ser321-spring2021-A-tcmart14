@@ -30,7 +30,9 @@ class StringList {
         if (this.size() == 0)
             return "null";
 
-        return strings.get(this.size()-1);
+        String temp = strings.get(this.size()-1);
+        strings.remove(this.size()-1);
+        return temp;
     }
 
     public synchronized String count () {
