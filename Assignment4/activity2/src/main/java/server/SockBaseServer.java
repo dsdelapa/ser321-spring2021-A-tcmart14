@@ -39,7 +39,7 @@ class SockBaseServer implements Runnable {
         }
     }
 
-    public void playGame () {
+    public void playGame () throws Exception {
         writeToLog(name, Message.START);
         Response resp;
         int i = 1;
@@ -81,6 +81,7 @@ class SockBaseServer implements Runnable {
         try {
             response.writeDelimitedTo(out);
             req = Request.parseDelimitedFrom(in);
+            writeToLog(name, req.toString());
             if (req.getOperationType() == Request.OperationType.ANSWER) {
                 String answer = req.getAnswer();
                 System.out.print("Received answer: " + answer);
@@ -142,6 +143,7 @@ class SockBaseServer implements Runnable {
                     System.out.println("written greeting to client");
 
                     op = Request.parseDelimitedFrom(in);
+                    writeToLog(name, op.toString());
                     switch (op.getOperationType()) {
                         case LEADER:
                             sendLeaderBoard();
@@ -154,6 +156,8 @@ class SockBaseServer implements Runnable {
                     }
                     //System.out.println("Time to start new iteration");
                 }
+            } else {
+                throw new Exception();
             }
 
         } catch (Exception ex) {
@@ -175,7 +179,7 @@ class SockBaseServer implements Runnable {
      * @param num -- number of x to be turned
      * @return String of the new hidden image
      */
-    public String replace(int num){
+    public String replace(int num) {
         for (int i = 0; i < num; i++){
             if (game.getIdx()< game.getIdxMax())
                 game.replaceOneCharacter();
