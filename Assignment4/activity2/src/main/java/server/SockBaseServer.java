@@ -81,7 +81,7 @@ class SockBaseServer implements Runnable {
         try {
             response.writeDelimitedTo(out);
             req = Request.parseDelimitedFrom(in);
-            writeToLog(name, req.toString());
+            //writeToLog(name, req.toString());
             if (req.getOperationType() == Request.OperationType.ANSWER) {
                 String answer = req.getAnswer();
                 System.out.print("Received answer: " + answer);
@@ -143,7 +143,7 @@ class SockBaseServer implements Runnable {
                     System.out.println("written greeting to client");
 
                     op = Request.parseDelimitedFrom(in);
-                    writeToLog(name, op.toString());
+                    //writeToLog(name, op.toString());
                     switch (op.getOperationType()) {
                         case LEADER:
                             sendLeaderBoard();
