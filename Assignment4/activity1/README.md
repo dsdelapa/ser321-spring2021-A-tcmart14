@@ -36,4 +36,18 @@ Base Code, please use the following commands:
 ```   
 
 
+## Requirement fulfilled
 
+All tasks should be implemnted fully and be operational without any issues.
+
+## Program input
+
+add expects the user to put in a string, anye stream of characters should work.
+
+Pop, no use input other than selecting the pop operation.
+
+Display, no extra input outside of selecting the display operation
+
+Count, no extra input outside of selecting the count operation
+
+Switch, expects the input of two numbers that are valid indexes of the list of Strings

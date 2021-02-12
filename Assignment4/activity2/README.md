@@ -71,3 +71,11 @@ Run Java:
 Java
 gradle runClient -Pport=9099 -Phost='localhost'
 gradle runServer -Pport=9099
+
+
+## Implementation details
+
+Most functionality should be implemented. The "tasks" are not really fun, they are just tasks to demonstrate that it works.
+Some users from slack did report that their clients had issues with completing a game, other did not. No issues on my wide with this.
+Game does quit gracefully using option 3, also option 0 and when the user inputs anything other than 1 or 2 in the menu.
+No input that I have tried has broken it.
