@@ -50,3 +50,6 @@ Assignment4/Assignment4/activity2/build/generated/source/proto/main/java/buffers
 Assignment4/Assignment4/activity2/build/generated/source/proto/main/java/buffers/ResponseProtos.java
 Assignment4/Assignment4/activity2/build/tmp/compileJava/source-classes-mapping.txt
 Assignment4/Assignment4/activity2/logs.txt
+Assignment5/MergeSort/.gradle/6.6.1/gc.properties
+*.properties
+Assignment5/MergeSort/build.gradle
