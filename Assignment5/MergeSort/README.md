@@ -80,8 +80,21 @@ As an example, Doing a traceroute on my machine to google, it took 7 hops to get
 others took 20 ms. 
 
 2.
+I saw a large change in the how long it took for it to complete. It took 3855 ms for 12 elements and 151680 ms for 500 elements in the array.
+The major difference is the waiting on traffic to be exchanged between the branch and the node that is on a machine that is not the same machine
+as the branch. So, traffic has to be routed around the internet to hit the server. Then there is the TCP handshake and package integrity features
+that is a major speed penalty. Also, the server it was deployed to also was not the fastest using a virtual CPU and a limited amount of RAM, however,
+due to the simple nature of this program, it does not play a huge factor. 
 
 **Task 3**
 1.
+Most time is lost in networking. There is the routing over the internet, communicating results one number at a time, and the TCP integrity of connection.
+If I wanted to run an efficient merge sort, I would just run it locally. However, if it had to be a distributed system, I would implement a UDP protocol
+that gave some integrity, but not as much, trying to eliminate overhead. The only other thing that can be done is to ensure that nodes in the network have 
+shorter pipelines to eachother, which may only happen if they reside in the same datacenter, using the same pipeline. Otherwise, how a packet is routed can
+change from one moment to the next. We could also change it so that whole sets are returned rather than a single integer at a time during the sorting phase.
 
 2.
+For this algorithm, no. Mergesort is O(n log n), so by itself it is already pretty efficient. We are loosing most of our time on the network. The only time I can
+see it as efficient is if the data set is so large that it would require more memory than the system has to be able to run the computations. Then it would be required
+to distirbute the load and pool the resources. 
