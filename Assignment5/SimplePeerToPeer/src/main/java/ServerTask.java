@@ -1,8 +1,13 @@
+package SimplePeerToPeer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.io.PrintWriter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.*;
 
@@ -17,6 +22,8 @@ public class ServerTask extends Thread {
 	private Peer peer = null; // so we have access to the peer that belongs to that thread
 	private PrintWriter out = null;
 	private Socket socket = null;
+	private boolean isLeaderElectionSeason;
+	//private ElectionList list;
 	
 	// Init with socket that is opened and the peer
 	public ServerTask(Socket socket, Peer peer) throws IOException {
@@ -24,6 +31,8 @@ public class ServerTask extends Thread {
 		out = new PrintWriter(socket.getOutputStream(), true);
 		this.peer = peer;
 		this.socket = socket;
+		//isLeaderElectionSeason = false;
+		isLeaderElectionSeason = false;
 	}
 	
 	// basically wait for an input, right now we can only handle a join request
@@ -37,6 +46,8 @@ public class ServerTask extends Thread {
 			try {
 			    JSONObject json = new JSONObject(bufferedReader.readLine());
 
+			    System.out.println("\tREVEICED: " + json.toString());
+
 			    if (json.getString("type").equals("join")){
 			    	System.out.println("     " + json); // just to show the json
 
@@ -49,6 +60,55 @@ public class ServerTask extends Thread {
 			    	}
 			    	// TODO: should make sure that all peers that the leader knows about also get the info about the new peer joining
 			    	// so they can add that peer to the list
+			    } else if (json.getString("type").equals("alert")) {
+			    	if (json.getString("alert").equals("dead leader")) {
+			    		peer.removeLeader();
+			    		peer.startElection();
+			    	} else if (json.getString("alert").equals("newLeader")) {
+			    		peer.setLeader(json.getString("ip"), Integer.parseInt(json.getString("port")));
+			    	}
+			    } else if (json.getString("type").equals("candidacy")) {
+			    	String h = json.getString("ip");
+			    	String p = json.getString("port");
+			    	int num = Integer.parseInt(json.getString("number"));
+			    	// need to add peers with their respective numbers here
+			    	
+			    	peer.addPeerCandidate(h, p, num);
+			    	System.out.println("done adding person");
+			    	//System.out.println("IP: " + temp.host + " port: " + temp.port + " number: " + temp.number);
+			    	//System.out.println("\t**Number of votes collected: " + peerElectionNumbers.size());
+			    	//System.out.println("\t**Number of votes needed to conclude: " + peer.numberOfPeers());
+			    } else if (json.getString("type").equals("removePeer")) {
+			    	System.out.println("\tRemoving the peer");
+			    	peer.removeAPeer(json.getString("ip"), json.getString("port"));
+			    	System.out.println("\tRemoving Peer ["+json.getString("ip")+":"+json.getString("port")+"]");
+			    	System.out.println("\tUpdating clients");
+			    	String temp = peer.getPeers();
+			    	System.out.println(JSONMessageBuilder.peerListMessage(temp, peer.getMySocketInfo()));
+			    	peer.pushMessage(JSONMessageBuilder.peerListMessage(temp, peer.getMySocketInfo()));
+			    } else if (json.getString("type").equals("peerList") && !peer.isLeader()) {
+			    	String temp = json.getString("peerList");
+			    	peer.newPeerList(temp);
+			    }  else if (json.getString("type").equals("ask")) {
+			    	if (json.getString("ask").equals("can I has leader?")) {
+			    		peer.pushMessage(JSONMessageBuilder.voteMessage(true));
+			    	} else if (json.getString("ask").equals("joke")) {
+			    		peer.addPotentialJoke(json.getString("joke"));
+			    		peer.startJokeElection();
+			    	}
+			    } else if (json.getString("type").equals("vote")) {
+			    	if (json.getString("vote").equals("yes")) {
+			    		peer.tallyVotes();
+			    	}
+
+			    } else if (json.getString("type").equals("pollJoke")) {
+			    	peer.voteJoke();
+			    } else if (json.getString("type").equals("voteJoke")) {
+			    	if (json.getString("voteJoke").equals("yes")) {
+			    		peer.tallyJokeVote();
+			    	}
+			    } else if (json.getString("type").equals("addJoke")) { 
+			    	peer.addJoke(json.getString("joke"));
 			    } else {
 			    	System.out.println("[" + json.getString("username")+"]: " + json.getString("message"));
 			    }
