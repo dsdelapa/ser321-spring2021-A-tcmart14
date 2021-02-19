@@ -35,8 +35,9 @@ task Branch(type: JavaExec) {
   main = 'mergeSort.Branch'
   standardInput = System.in
   args 7000
-  args 8000
   args 8001
+  args 8000
+  args "8.9.30.155"
 
 }
 
@@ -48,5 +49,5 @@ task Sorter(type: JavaExec) {
 
   main = 'mergeSort.Sorter'
   standardInput = System.in
-  args 8001
+  args 8000
 }
