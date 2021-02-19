@@ -35,7 +35,7 @@ task runPeer(type: JavaExec) {
 
   classpath = sourceSets.main.runtimeClasspath
 
-  main = 'Peer'
+  main = 'SimplePeerToPeer.Peer'
   standardInput = System.in
 
   args peerName
