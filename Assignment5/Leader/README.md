@@ -39,3 +39,13 @@ Some things that it does not do:
 Two extra features are implemented.
 - peerList: user inputs this at peer console and gets a list of all connected peers
 - jokeList: user puts this in at peer console and get a list of all jokes stored
+
+### Leader Election notes
+
+Leader election is not fully fault proof. It appears to work well for 1 or 2 elections after the leaders at the time die. After that, errors start to occur.
+
+### Joke
+
+User can ask to enter a joke by inputing joke at user console.
+
+A deviation from requirements is that all peers vote automatically with no user intervention.
