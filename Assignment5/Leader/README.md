@@ -34,3 +34,8 @@ Some things that it does not do:
 - check inputs from Gradle (would be good to include that)
 - most requests to the server are not acknowledged, e.g. when a message is send we just send it and the server will never respond to us that they actually go it
 
+### Features
+
+Two extra features are implemented.
+- peerList: user inputs this at peer console and gets a list of all connected peers
+- jokeList: user puts this in at peer console and get a list of all jokes stored
