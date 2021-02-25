@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Client that requests `parrot` method from the `EchoServer`.
@@ -22,6 +23,7 @@ public class EchoClient {
   private final JokeGrpc.JokeBlockingStub blockingStub2;
   private final RegistryGrpc.RegistryBlockingStub blockingStub3;
     private final CalcGrpc.CalcBlockingStub blockingStub4;
+    private final TipsGrpc.TipsBlockingStub blockingStub5;
 
   /** Construct client for accessing server using the existing channel. */
   public EchoClient(Channel channel, Channel regChannel) {
@@ -35,6 +37,7 @@ public class EchoClient {
     blockingStub2 = JokeGrpc.newBlockingStub(channel);
     blockingStub3 = RegistryGrpc.newBlockingStub(regChannel);
     blockingStub4 = CalcGrpc.newBlockingStub(channel); // may be an issue
+    blockingStub5 = TipsGrpc.newBlockingStub(channel);
   }
 
   public void askServerToParrot(String message) {
@@ -189,6 +192,7 @@ public class EchoClient {
           System.out.println("Please select an option");
           System.out.println("\t[1] Joke");
           System.out.println("\t[2] Calc");
+          System.out.println("\t[3] Tips");
           System.out.print(">> ");
           option = reader.readLine();
 
@@ -207,11 +211,16 @@ public class EchoClient {
       // showing 6 joked
                       client.askForJokes(Integer.valueOf(6));
                       break;
+                  case "2" :
+                      client.doCalc();
+                      break;
+                  case "3" :
+                      client.doTips();
+                      // do stuff
+                      break;
                   default :
                       System.out.println("Not valid, try again...");
                       break;
-                  case "2" :
-                      client.doCalc();
           }
       }
 
@@ -244,6 +253,65 @@ public class EchoClient {
       regChannel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
     }
   }
+
+    public void doTips () {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Pick an option for tips:");
+            System.out.println("\t[1] Read tips");
+            System.out.println("\t[2] Add a new tip");
+            System.out.print(">> ");
+            String opt = reader.readLine();
+            switch (opt) {
+                case "1" :
+                    readTips();
+                    break;
+                case "2" :
+                    addNewTip();
+                    break;
+                default :
+                    System.out.println("Not a valid option, going back to the main menu");
+            }
+        } catch (IOException e) {
+            System.err.println("Issue taking input...");
+        } catch (Exception a) {
+            System.err.println("Issue completing the task....");
+        }
+    }
+
+    public void readTips () throws Exception {
+        Empty e = service.Empty.newBuilder().build();
+        TipsReadResponse response = blockingStub5.read(e);
+        if (!response.getIsSuccess()) {
+            throw new Exception();
+        }
+        List<Tip> tips = response.getTipsList();
+        for (Tip t : tips) {
+            System.out.println(t.getTip());
+        }
+    }
+
+    public void addNewTip () throws Exception {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Type in new tip to add");
+            System.out.print(">> ");
+            String tip = reader.readLine();
+            Tip t = Tip.newBuilder().setName("").setTip(tip).build();
+            //Tip t = new Tip();
+            //t.setTip(tip);
+            //t.setName("name");
+            TipsWriteRequest req = TipsWriteRequest.newBuilder().setTip(t).build();
+            TipsWriteResponse  resp = blockingStub5.write(req);
+            if (resp.getIsSuccess()) {
+                System.out.println("Added a new tip!");
+            } else {
+                new Exception();
+            }
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    }
 
     public void doCalc () {
         try {
