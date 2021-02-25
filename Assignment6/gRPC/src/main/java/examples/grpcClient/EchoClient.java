@@ -11,6 +11,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+
+import java.util.ArrayList;
+
 /**
  * Client that requests `parrot` method from the `EchoServer`.
  */
@@ -18,6 +21,7 @@ public class EchoClient {
   private final EchoGrpc.EchoBlockingStub blockingStub;
   private final JokeGrpc.JokeBlockingStub blockingStub2;
   private final RegistryGrpc.RegistryBlockingStub blockingStub3;
+    private final CalcGrpc.CalcBlockingStub blockingStub4;
 
   /** Construct client for accessing server using the existing channel. */
   public EchoClient(Channel channel, Channel regChannel) {
@@ -30,6 +34,7 @@ public class EchoClient {
     blockingStub = EchoGrpc.newBlockingStub(channel);
     blockingStub2 = JokeGrpc.newBlockingStub(channel);
     blockingStub3 = RegistryGrpc.newBlockingStub(regChannel);
+    blockingStub4 = CalcGrpc.newBlockingStub(channel); // may be an issue
   }
 
   public void askServerToParrot(String message) {
@@ -179,36 +184,54 @@ public class EchoClient {
       // ask the user for input how many jokes the user wants
       BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+      while (true) {
+          String option = "";
+          System.out.println("Please select an option");
+          System.out.println("\t[1] Joke");
+          System.out.println("\t[2] Calc");
+          System.out.print(">> ");
+          option = reader.readLine();
+
+          switch (option) {
+                  case "1" :
       // Reading data using readLine
-      System.out.println("How many jokes would you like?"); // NO ERROR handling of wrong input here.
-      String num = reader.readLine();
+                      System.out.println("How many jokes would you like?"); // NO ERROR handling of wrong input here.
+                      String num = reader.readLine();
 
       // calling the joked service from the server with num from user input
-      client.askForJokes(Integer.valueOf(num));
+                      client.askForJokes(Integer.valueOf(num));
 
       // adding a joke to the server
-      client.setJoke("I made a pencil with two erasers. It was pointless.");
+                      client.setJoke("I made a pencil with two erasers. It was pointless.");
 
       // showing 6 joked
-      client.askForJokes(Integer.valueOf(6));
+                      client.askForJokes(Integer.valueOf(6));
+                      break;
+                  default :
+                      System.out.println("Not valid, try again...");
+                      break;
+                  case "2" :
+                      client.doCalc();
+          }
+      }
 
       // ############### Contacting the registry just so you see how it can be done
 
       // Comment these last Service calls while in Activity 1 Task 1, they are not needed and wil throw issues without the Registry running
       // get thread's services
-      client.getServices();
+      //client.getServices();
 
       // get parrot
-      client.findServer("services.Echo/parrot");
+      //client.findServer("services.Echo/parrot");
       
       // get all setJoke
-      client.findServers("services.Joke/setJoke");
+      //client.findServers("services.Joke/setJoke");
 
       // get getJoke
-      client.findServer("services.Joke/getJoke");
+      //client.findServer("services.Joke/getJoke");
 
       // does not exist
-      client.findServer("random");
+      //client.findServer("random");
 
 
     } finally {
@@ -221,4 +244,71 @@ public class EchoClient {
       regChannel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
     }
   }
+
+    public void doCalc () {
+        try {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        ArrayList<Double> list = getNumbers();
+        CalcResponse rep = null;
+        System.out.println("Pick an operation [add, sub, mult, div] : ");
+        System.out.print(">> ");
+        String option = reader.readLine();
+        CalcRequest req = null;
+        switch (option) {
+        case "add":
+            req = CalcRequest.newBuilder().addAllNum(list).build();
+            rep = blockingStub4.add(req);
+            break;
+        case "sub" :
+            req = CalcRequest.newBuilder().addAllNum(list).build();
+            rep = blockingStub4.subtract(req);
+            break;
+        case "mult" :
+            req = CalcRequest.newBuilder().addAllNum(list).build();
+            rep = blockingStub4.multiply(req);
+            break;
+        case "div" :
+            req = CalcRequest.newBuilder().addAllNum(list).build();
+            rep = blockingStub4.divide(req);
+            break;
+        default :
+            System.out.println("Wrong option choice, try again...");
+            doCalc();
+        }
+        double ans = rep.getSolution();
+        System.out.println("Answer is: "  + ans);
+
+        } catch (IOException e) {
+            System.out.println("Wrong input type");
+        }
+    }
+
+    public static ArrayList<Double> getNumbers () {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        ArrayList<Double> temp = new ArrayList<>();
+        String numberReader = "";
+        while (true) {
+            System.out.println("Enter a number [to stop put in any non integer] : ");
+
+            try {
+                String num = reader.readLine();
+                temp.add(Double.parseDouble(num));
+            } catch (IOException a) {
+                System.out.println("Something went wrong with the input, try again.....");
+                continue;
+            } catch (Exception e) {
+                if (temp.size() < 2) {
+                    System.out.println("Not enough numbers, try again....");
+                    temp = new ArrayList<>();
+                    continue;
+                } else {
+                    return temp;
+                }
+            }
+        }
+        //return temp;
+    }
+
+
 }

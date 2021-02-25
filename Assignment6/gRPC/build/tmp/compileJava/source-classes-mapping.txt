@@ -108,14 +108,14 @@ service/EchoGrpc.java
  service.EchoGrpc$EchoMethodDescriptorSupplier
  service.EchoGrpc$EchoStub
  service.EchoGrpc$MethodHandlers
-service/SingleServerRes.java
- service.SingleServerRes
- service.SingleServerRes$1
- service.SingleServerRes$Builder
 service/CalcResponse.java
  service.CalcResponse
  service.CalcResponse$1
  service.CalcResponse$Builder
+service/SingleServerRes.java
+ service.SingleServerRes
+ service.SingleServerRes$1
+ service.SingleServerRes$Builder
 service/ServicesListRes.java
  service.ServicesListRes
  service.ServicesListRes$1
@@ -196,6 +196,8 @@ service/FindServerReq.java
  service.FindServerReq
  service.FindServerReq$1
  service.FindServerReq$Builder
+examples/grpcClient/CalcImpl.java
+ example.grpcclient.CalcImpl
 service/StoryProto.java
  service.StoryProto
 examples/TestProtobuf.java
@@ -237,10 +239,10 @@ service/FindServersReq.java
  service.FindServersReq
  service.FindServersReq$1
  service.FindServersReq$Builder
-service/ServicesListResOrBuilder.java
- service.ServicesListResOrBuilder
 service/CalcRequestOrBuilder.java
  service.CalcRequestOrBuilder
+service/ServicesListResOrBuilder.java
+ service.ServicesListResOrBuilder
 buffers/RequestProtos.java
  buffers.RequestProtos
  buffers.RequestProtos$1

@@ -5,6 +5,8 @@ import io.grpc.ServerBuilder;
 import io.grpc.ServerMethodDefinition;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+// import example.grpc.CalcImpl;
+//import example.;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,7 +39,9 @@ public class Node {
     server = ServerBuilder.forPort(port)
         .addService(new EchoImpl())
         .addService(new JokeImpl())
-        .addService(new RegistryAnswerImpl(services)).build().start();
+        .addService(new RegistryAnswerImpl(services))
+        .addService(new CalcImpl())
+        .build().start();
 
     for (var service : server.getServices()) {
       // returns the services that are available from this node
