@@ -24,6 +24,7 @@ public class EchoClient {
   private final RegistryGrpc.RegistryBlockingStub blockingStub3;
     private final CalcGrpc.CalcBlockingStub blockingStub4;
     private final TipsGrpc.TipsBlockingStub blockingStub5;
+    private final StockGrpc.StockBlockingStub blockingStub6;
 
   /** Construct client for accessing server using the existing channel. */
   public EchoClient(Channel channel, Channel regChannel) {
@@ -38,6 +39,7 @@ public class EchoClient {
     blockingStub3 = RegistryGrpc.newBlockingStub(regChannel);
     blockingStub4 = CalcGrpc.newBlockingStub(channel); // may be an issue
     blockingStub5 = TipsGrpc.newBlockingStub(channel);
+    blockingStub6 = StockGrpc.newBlockingStub(channel);
   }
 
   public void askServerToParrot(String message) {
@@ -193,6 +195,7 @@ public class EchoClient {
           System.out.println("\t[1] Joke");
           System.out.println("\t[2] Calc");
           System.out.println("\t[3] Tips");
+          System.out.println("\t[4] Markets");
           System.out.print(">> ");
           option = reader.readLine();
 
@@ -217,6 +220,9 @@ public class EchoClient {
                   case "3" :
                       client.doTips();
                       // do stuff
+                      break;
+                  case "4" :
+                      client.doMarket();
                       break;
                   default :
                       System.out.println("Not valid, try again...");
@@ -253,6 +259,80 @@ public class EchoClient {
       regChannel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
     }
   }
+
+    public void doMarket () {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String opt = "";
+        System.out.println("Please select an option");
+        System.out.println("\t[1] Get Stock price");
+        System.out.println("\t[2] Get Stock annual yield");
+        System.out.print(">> ");
+        try {
+            opt = reader.readLine();
+        } catch (IOException e) {
+            System.out.println("Not the correct input!");
+            return;
+        }
+        switch (opt) {
+        case "1" :
+            doStock();
+            break;
+        case "2" :
+            doAnnual();
+            break;
+        default :
+            System.out.println("Not an expected input... Back to main menu");
+            break;
+        }
+    } 
+
+    public void doStock () {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String tickerSymbol = "";
+        try {
+            System.out.println("Enter in a stock ticker symbol");
+            System.out.print(">> ");
+            tickerSymbol = reader.readLine();
+            StockReq request = StockReq.newBuilder().setTicker(tickerSymbol).build();
+            StockRes rep = blockingStub6.getStock(request);
+            if (rep.getSuccess()) {
+                //                double quote = rep.getQuote();
+                //                String name = rep.getName();
+                System.out.println("Name: " + rep.getName());
+                System.out.println("Price: " + rep.getQuote());
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            System.out.println("Request failed somewhere");
+        }
+    }
+
+    public void doAnnual () {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String ticker = "";
+        System.out.println("Enter stock symbol");
+        System.out.print(">> ");
+        try {
+            ticker = reader.readLine();
+        } catch (IOException e) {
+            System.out.println("Not a valid input.");
+        }
+        try {
+            StockReq r = StockReq.newBuilder().setTicker(ticker).build();
+            StockAnnualYieldResp resp = blockingStub6.getAnnualYield(r);
+            if (!resp.getSuccess()) {
+                throw new Exception();
+            }
+            double annualYield = resp.getAnnualYield();
+            double percent = resp.getAnnualPercentYield();
+            System.out.println("For ticker: " + ticker);
+            System.out.println("\tAnnual Yield: " + annualYield);
+            System.out.println("\tPercent Annual: " + percent);
+        } catch (Exception e) {
+            System.out.println("An issue occured with the request");
+        }
+    }
 
     public void doTips () {
         try {
