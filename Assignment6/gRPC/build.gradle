@@ -169,6 +169,37 @@ task runNode(type: JavaExec) {
   args nodeName
 }
 
+// ####### Client Server example with grpc
+
+// runs a client which will run some commands on a node and also on the registration node
+task runClient2(type: JavaExec) {
+    dependsOn arguments
+    classpath = sourceSets.main.runtimeClasspath
+    description = "Run Client"
+    main = 'example.grpcclient.Client'
+    standardInput = System.in
+    // default args
+    args serviceHost 
+    args servicePort
+    args registryHost
+    args grpcPort
+    args message 
+}
+
+// runs a service node which already has the echo and joke service included
+task registerServiceNode(type: JavaExec) {
+    dependsOn arguments
+    classpath = sourceSets.main.runtimeClasspath
+    description = "Run Server"
+    main = 'example.grpcclient.NodeService'
+    // default args
+    args registryHost
+    args grpcPort
+    args serviceHost
+    args servicePort
+    args nodeName
+}
+
 
 // How I ran it:
 // ser321test.duckdns.org is my IP on the first AWS instance
