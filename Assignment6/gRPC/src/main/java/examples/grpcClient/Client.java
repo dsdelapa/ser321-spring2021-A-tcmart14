@@ -189,6 +189,25 @@ public class Client {
       // ask the user for input how many jokes the user wants
       BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+
+      // ############### Contacting the registry just so you see how it can be done
+
+      // Comment these last Service calls while in Activity 1 Task 1, they are not needed and wil throw issues without the Registry running
+      // get thread's services
+      client.getServices();
+
+      // get parrot
+      client.findServer("services.Echo/parrot");
+      
+      // get all setJoke
+      client.findServers("services.Joke/setJoke");
+
+      // get getJoke
+      client.findServer("services.Joke/getJoke");
+
+      // does not exist
+      client.findServer("random");
+
       while (true) {
           String option = "";
           System.out.println("Please select an option");
@@ -229,25 +248,6 @@ public class Client {
                       break;
           }
       }
-
-      // ############### Contacting the registry just so you see how it can be done
-
-      // Comment these last Service calls while in Activity 1 Task 1, they are not needed and wil throw issues without the Registry running
-      // get thread's services
-      client.getServices();
-
-      // get parrot
-      client.findServer("services.Echo/parrot");
-      
-      // get all setJoke
-      client.findServers("services.Joke/setJoke");
-
-      // get getJoke
-      client.findServer("services.Joke/getJoke");
-
-      // does not exist
-      client.findServer("random");
-
 
     } finally {
       // ManagedChannels use resources like threads and TCP connections. To prevent

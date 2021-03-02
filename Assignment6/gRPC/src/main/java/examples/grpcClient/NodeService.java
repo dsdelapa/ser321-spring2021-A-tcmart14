@@ -27,7 +27,7 @@ public class NodeService {
 
   net.Network network = null;
 
-  Node(int port) {
+  NodeService(int port) {
     this.port = port;
     this.network = new net.proto.Network();
   }
