@@ -25,3 +25,24 @@ Registers the protobuf nodes from runDiscovery and do some calls.
 
 ### gradle testJSONRegistration
 Registers the json nodes from runDiscovery and do some calls. 
+
+
+### Notes on running
+
+Nothing has changed from the default behavior provided.
+
+To run client:
+gradle runClientJava
+
+To run Node:
+gradle runNode
+
+### Implementation details
+
+Tips and story were implemented for task 1.
+
+For a custom method, I have implmented a stock ticker that uses the YahooFinance API, dependency is writting into the gradle dependencies. This offer two requests. One request to get the name and stock price, given a ticker symbol. The other request will retrieve the annual percentages for dividends given a valid ticker symbol.
+
+Some valid ticker symbols:
+- intc
+- aapl
