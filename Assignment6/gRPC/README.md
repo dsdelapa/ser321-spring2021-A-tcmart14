@@ -48,4 +48,4 @@ Some valid ticker symbols:
 - aapl
 
 ## Link for video
-https://youtu.be/RjZXiVBznp8
+https://youtu.be/Xa2vhSwx5fw
