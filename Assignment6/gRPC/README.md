@@ -46,3 +46,6 @@ For a custom method, I have implmented a stock ticker that uses the YahooFinance
 Some valid ticker symbols:
 - intc
 - aapl
+
+## Link for video
+https://youtu.be/RjZXiVBznp8
